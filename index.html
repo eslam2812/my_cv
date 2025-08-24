@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Eslam Nasr — Automotive Embedded Software Engineer</title>
+<meta name="description" content="Interactive web CV of Eslam Elsaid Nasr Eldin — Automotive Embedded Software Engineer" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0e13; --card:#121723cc; --muted:#9aa4b2; --text:#e7ecf3; --brand:#5dd8ff; --accent:#7cffc4; --ring: rgba(93,216,255,.45);
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  [data-theme="light"]{
+    --bg:#f6f9fc; --card:#ffffffcc; --muted:#5b616e; --text:#0e1621; --brand:#0077ff; --accent:#00b090; --ring: rgba(0,119,255,.25);
+    --shadow:0 10px 25px rgba(0,0,0,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--text); background:radial-gradient(1200px 600px at 80% -10%, #14324a 0%, transparent 40%),
+                        radial-gradient(900px 500px at -10% 30%, #1b3b2f 0%, transparent 40%),
+                        var(--bg);
+    overflow-x:hidden; line-height:1.6;
+  }
+  /* particles canvas backdrop */
+  #bgCanvas{position:fixed; inset:0; z-index:-1; opacity:.35}
+
+  /* Header / nav */
+  .nav{
+    position:sticky; top:0; z-index:40; backdrop-filter:saturate(140%) blur(10px);
+    background:linear-gradient(180deg, var(--card), transparent);
+    border-bottom:1px solid #ffffff1a;
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    max-width:1100px; margin:auto; padding:14px 20px;
+  }
+  .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text)}
+  .brand .dot{width:10px; height:10px; border-radius:999px; background:linear-gradient(135deg,var(--brand),var(--accent)); box-shadow:0 0 0 6px var(--ring)}
+  .brand h1{font-size:18px; margin:0; font-weight:800; letter-spacing:.4px}
+  .nav a.link{color:var(--muted); text-decoration:none; padding:8px 10px; border-radius:10px}
+  .nav a.link.active, .nav a.link:hover{color:var(--text); background:#ffffff12}
+  .links{display:flex; gap:4px; flex-wrap:wrap}
+  .theme-toggle{
+    border:1px solid #ffffff22; background:transparent; color:var(--text);
+    padding:8px 10px; border-radius:12px; cursor:pointer;
+  }
+
+  /* Sections */
+  section{max-width:1100px; margin:0 auto; padding:70px 20px}
+  .grid{display:grid; gap:20px}
+  .two{grid-template-columns:1.2fr .8fr}
+  .card{
+    background:var(--card); border:1px solid #ffffff18; border-radius:18px; box-shadow:var(--shadow);
+    padding:22px; position:relative; overflow:hidden;
+  }
+  .badge{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); background:#ffffff10; border:1px solid #ffffff1a; padding:6px 10px; border-radius:999px}
+  h2{margin:0 0 10px; font-size:24px}
+  .muted{color:var(--muted)}
+  .chip{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid #ffffff24; background:#ffffff10; margin:4px 6px 0 0; font-size:12px}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px; text-decoration:none; color:#0b0e13; background:linear-gradient(135deg,var(--brand),var(--accent));
+    padding:10px 14px; border-radius:12px; font-weight:700; border:none; cursor:pointer;
+  }
+  .btn.outline{background:transparent;color:var(--text);border:1px solid #ffffff3a}
+  .hero{
+    display:grid; gap:20px; grid-template-columns:1.1fr .9fr; align-items:center;
+  }
+  .hero h1{font-size:40px; margin:0 0 8px}
+  .title-accent{background:linear-gradient(135deg,var(--brand),var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .photo{
+    width:100%; max-width:360px; justify-self:end; border-radius:22px; overflow:hidden; border:1px solid #ffffff22;
+    transform:rotate(1deg);
+  }
+  .photo img{display:block; width:100%; height:auto}
+  .quick li{margin:6px 0}
+  .quick a{color:var(--text); text-decoration:none}
+  .quick a:hover{text-decoration:underline}
+  .kpis{display:flex; gap:16px; flex-wrap:wrap; margin-top:12px}
+  .kpi{background:#ffffff10; border:1px solid #ffffff1a; padding:10px 14px; border-radius:14px; font-weight:700}
+  hr.sep{border:none; border-top:1px dashed #ffffff2a; margin:20px 0}
+
+  /* Skills */
+  .skills{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px}
+  .skill{background:#ffffff0a; border:1px solid #ffffff1a; border-radius:14px; padding:14px}
+  .bar{height:10px; background:#ffffff10; border-radius:999px; overflow:hidden; margin-top:8px}
+  .bar > span{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--brand),var(--accent))}
+  .skill h4{margin:0 0 2px}
+
+  /* Projects */
+  .filters{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px}
+  .filters button{border:1px solid #ffffff30; background:#ffffff0a; color:var(--text); padding:8px 10px; border-radius:10px; cursor:pointer}
+  .filters button.active{background:linear-gradient(135deg,var(--brand),var(--accent)); color:#0b0e13; border:none}
+  .projects{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px}
+  .project{position:relative}
+  .project h3{margin:0 0 6px}
+  .project .meta{font-size:13px; color:var(--muted); margin-bottom:8px}
+  .project .tags{margin-top:8px}
+  .project .tags .chip{margin-bottom:6px}
+
+  /* Timeline (Education & Activities) */
+  .timeline{position:relative; padding-left:24px}
+  .timeline::before{content:""; position:absolute; left:10px; top:0; bottom:0; width:2px; background:linear-gradient(var(--brand),transparent)}
+  .tl{position:relative; margin:16px 0; padding:12px 14px; background:#ffffff0a; border:1px solid #ffffff1a; border-radius:12px}
+  .tl::before{content:""; position:absolute; left:-6px; top:16px; width:12px; height:12px; border-radius:999px; background:linear-gradient(135deg,var(--brand),var(--accent)); box-shadow:0 0 0 6px var(--ring)}
+
+  /* Contact */
+  .contact a{color:var(--text); text-decoration:none}
+  .contact a:hover{text-decoration:underline}
+  .footer{padding:40px 20px; text-align:center; color:var(--muted)}
+
+  /* Reveal animation */
+  .reveal{opacity:0; transform:translateY(16px); transition:all .7s ease}
+  .reveal.show{opacity:1; transform:none}
+
+  /* Back to top */
+  #toTop{position:fixed; right:18px; bottom:18px; z-index:50; display:none}
+
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr}
+    .photo{justify-self:start; max-width:240px; transform:none}
+    .two{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top"><span class="dot"></span><h1>Eslam Nasr</h1></a>
+    <nav class="links">
+      <a class="link" href="#about">About</a>
+      <a class="link" href="#education">Education</a>
+      <a class="link" href="#projects">Projects</a>
+      <a class="link" href="#skills">Skills</a>
+      <a class="link" href="#activities">Activities</a>
+      <a class="link" href="#contact">Contact</a>
+    </nav>
+    <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">Toggle Theme</button>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="card reveal">
+      <span class="badge">Automotive Embedded Software Engineer</span>
+      <h1>Hi, I'm <span class="title-accent">Eslam Elsaid Nasr Eldin</span> 👋</h1>
+      <p class="muted">Focused on C/Embedded C, ARM, RTOS, CAN, BLE/NFC. I build secure, real‑time systems and love turning specs into reliable firmware.</p>
+      <div class="kpis">
+        <div class="kpi">BSc Electronics & Communication — 2025</div>
+        <div class="kpi">Accumulative Grade: Very Good (81.85%)</div>
+        <div class="kpi">Military Status: Exemption</div>
+      </div>
+      <hr class="sep">
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <a class="btn" href="Eslam_Nasr_CV.pdf" download>⬇ Download CV (PDF)</a>
+        <a class="btn outline" href="#projects">See Projects ↓</a>
+      </div>
+    </div>
+    <div class="photo card reveal">
+      <img src="IMG_6618.PNG" alt="Eslam Nasr portrait">
+    </div>
+  </section>
+
+  <!-- ABOUT / OBJECTIVE -->
+  <section id="about" class="grid two">
+    <div class="card reveal">
+      <h2>Objective</h2>
+      <p>Secure a role as an <strong>Automotive Embedded Software Developer</strong> in a multinational environment where I can deliver features across CAN‑based vehicle communication, cybersecurity, and RTOS‑driven firmware.</p>
+      <div class="chip">C / Embedded C</div>
+      <div class="chip">ARM Cortex‑M3/M4</div>
+      <div class="chip">RTOS</div>
+      <div class="chip">CAN • LIN • UART • SPI • I²C</div>
+    </div>
+    <div class="card reveal">
+      <h2>Digital Vehicle Key — Team Lead</h2>
+      <p class="muted">Sep 2024 – Jul 2025 · Sponsored by Swift Act</p>
+      <ul class="quick">
+        <li>Smartphone‑based access with <strong>BLE</strong> and <strong>NFC</strong> (passive entry/start, remote access, timed key sharing).</li>
+        <li>Role: Team Lead & Lead Developer for <strong>CAN</strong> comms and <strong>Cybersecurity</strong>.</li>
+        <li>Vehicle‑side CAN integration for proximity sensing & access control.</li>
+        <li>Secure auth sequence: RSA (exchange) + AES‑256‑GCM (encrypted comms) with PKI handling.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="grid two">
+    <div class="card reveal">
+      <h2>Education</h2>
+      <div class="timeline">
+        <div class="tl">
+          <strong>Faculty of Engineering – Mansoura University</strong>
+          <div class="muted">BSc, Electronics & Communication · 2020–2025 · Grade: Very Good (81.85%)</div>
+        </div>
+      </div>
+    </div>
+    <div class="card reveal">
+      <h2>Courses</h2>
+      <ul class="quick">
+        <li><strong>Intro to Automotive Cybersecurity</strong> (Oct 2024): CIA triad, AES, RSA, hybrid crypto, PKI & certificates, message authentication.</li>
+        <li><strong>Advanced Embedded Systems Diploma</strong> (Aug–Oct 2023): ARM architecture, debugging, exceptions, RCC, GPIO, NVIC, DMA.</li>
+        <li><strong>Embedded Systems Diploma</strong> (Sep 2022 – Jul 2023): C/Embedded C, data structures, AVR/STM32 interfacing, CAN/LIN, FreeRTOS, Git.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="card reveal">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap">
+      <h2>Projects</h2>
+      <div class="filters" aria-label="Project filters">
+        <button class="active" data-filter="all">All</button>
+        <button data-filter="stm32">STM32</button>
+        <button data-filter="avr">AVR</button>
+        <button data-filter="app">Apps</button>
+        <button data-filter="iot">IoT</button>
+      </div>
+    </div>
+    <div class="projects" id="projectGrid">
+      <!-- Alarm System -->
+      <article class="project card" data-tags="stm32 i2c uart">
+        <h3>Alarm System</h3>
+        <div class="meta">Aug 2024 · STM32 (Bluepill & Nucleo) · DS1307 RTC · UART/I²C · CLCD · SYSTICK</div>
+        <p>Secure login (3 attempts), RTC management, up to 5 alarms, terminal + LCD UI, logic‑analyzer‑verified UART flow.</p>
+        <div class="tags">
+          <span class="chip">STM32</span><span class="chip">I²C</span><span class="chip">UART</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap">
+          <a class="btn outline" href="https://github.com/eslam276/Alarm_System" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn outline" href="https://www.linkedin.com/posts/eslam--nasr_embeddedsystems-stm32-microcontrollers-activity-7235995805373915136-xwV9" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </article>
+
+      <!-- Semi Smart Home -->
+      <article class="project card" data-tags="avr iot app">
+        <h3>Semi Smart Home</h3>
+        <div class="meta">Jul 2023 · AVR ATmega32 · Bluetooth/USART · PWM · ADC · Servo/DC motor control</div>
+        <p>Voice‑controlled home functions, login system, light intensity mapping via LDR, servo angle & DC speed via PWM.</p>
+        <div class="tags">
+          <span class="chip">AVR</span><span class="chip">PWM</span><span class="chip">Bluetooth</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap">
+          <a class="btn outline" href="https://github.com/eslam276/Semi_Smart_Home" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn outline" href="https://www.linkedin.com/posts/eslam--nasr_semi-smart-home-project-using-avr-atmega32-activity-7090371777767333889-cO1Q" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </article>
+
+      <!-- Remote Health & Location -->
+      <article class="project card" data-tags="iot app">
+        <h3>Remote Health & Location Monitoring</h3>
+        <div class="meta">Dec 2023 · Heart-rate sensor · GPS NEO‑6M · SIM800L GSM</div>
+        <p>Measured HR and GPS, sent real‑time SMS updates using GSM—embedded + IoT integration.</p>
+        <div class="tags">
+          <span class="chip">IoT</span><span class="chip">GSM</span><span class="chip">GPS</span>
+        </div>
+      </article>
+
+      <!-- Car Workshop App -->
+      <article class="project card" data-tags="app">
+        <h3>Car Workshop Console App</h3>
+        <div class="meta">Mar 2023 · Data Structures (Stack/Queue)</div>
+        <p>Workshop manager: add/serve customers, list counts, show most‑recent order.</p>
+        <div class="tags">
+          <span class="chip">C</span><span class="chip">DS & Algo</span>
+        </div>
+        <a class="btn outline" href="https://github.com/eslam276/Tasks/tree/main/Tasks/Breakin/Queue%20Tasks/Car%20workshop" target="_blank" rel="noopener">GitHub</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="card reveal">
+    <h2>Technical Skills</h2>
+    <div class="skills">
+      <div class="skill"><h4>C / Embedded C</h4><div class="bar"><span data-level="92"></span></div></div>
+      <div class="skill"><h4>Data Structures</h4><div class="bar"><span data-level="85"></span></div></div>
+      <div class="skill"><h4>ARM (Cortex‑M3/M4)</h4><div class="bar"><span data-level="88"></span></div></div>
+      <div class="skill"><h4>MCU Interfacing (STM32/AVR)</h4><div class="bar"><span data-level="90"></span></div></div>
+      <div class="skill"><h4>Protocols: UART • SPI • I²C • CAN • LIN</h4><div class="bar"><span data-level="87"></span></div></div>
+      <div class="skill"><h4>RTOS / FreeRTOS</h4><div class="bar"><span data-level="80"></span></div></div>
+      <div class="skill"><h4>Git / GitHub</h4><div class="bar"><span data-level="85"></span></div></div>
+      <div class="skill"><h4>Tools: STM32CubeIDE, Proteus, Logic Analyzer</h4><div class="bar"><span data-level="82"></span></div></div>
+    </div>
+  </section>
+
+  <!-- ACTIVITIES -->
+  <section id="activities" class="grid two">
+    <div class="card reveal">
+      <h2>Extracurricular</h2>
+      <div class="timeline">
+        <div class="tl">
+          <strong>Head of Embedded Systems Circle — Breakin Point</strong>
+          <div class="muted">Apr 2024 – Present</div>
+        </div>
+        <div class="tl">
+          <strong>Embedded Systems Supervisor — Breakin Point</strong>
+          <div class="muted">Jan 2023 – Apr 2024</div>
+        </div>
+      </div>
+    </div>
+    <div class="card reveal">
+      <h2>Languages & Soft Skills</h2>
+      <p><strong>Arabic:</strong> Native · <strong>English:</strong> Very good</p>
+      <div class="chip">Leadership</div>
+      <div class="chip">Communication</div>
+      <div class="chip">Time Management</div>
+      <div class="chip">Teamwork</div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="card reveal contact">
+    <h2>Contact</h2>
+    <ul class="quick">
+      <li>📧 <a href="mailto:eslamnasr7070@gmail.com">eslamnasr7070@gmail.com</a></li>
+      <li>📱 <a href="tel:+201013459499">+20 101 345 9499</a></li>
+      <li>🔗 <a href="https://www.linkedin.com/in/eslam--nasr" target="_blank" rel="noopener">LinkedIn: eslam--nasr</a></li>
+      <li>💻 <a href="https://github.com/eslam276" target="_blank" rel="noopener">GitHub: eslam276</a></li>
+    </ul>
+  </section>
+
+  <button id="toTop" class="btn">↑ Top</button>
+</main>
+
+<footer class="footer">© <span id="year"></span> Eslam Nasr — Built with HTML • CSS • JS</footer>
+
+<script>
+  // THEME TOGGLE
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('theme');
+  if(saved){ document.body.setAttribute('data-theme', saved); }
+  themeBtn.addEventListener('click', ()=>{
+    const cur = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.body.setAttribute('data-theme', cur);
+    localStorage.setItem('theme', cur);
+  });
+
+  // NAV active link on scroll (scroll spy)
+  const sections = [...document.querySelectorAll('main section[id]')];
+  const navLinks = [...document.querySelectorAll('.nav a.link')];
+  const spy = () => {
+    let idx = 0, fromTop = window.scrollY + 120;
+    sections.forEach((s,i)=>{ if(s.offsetTop <= fromTop) idx = i; });
+    navLinks.forEach(a=>a.classList.remove('active'));
+    const id = sections[idx]?.id;
+    const active = document.querySelector('.nav a[href="#'+id+'"]');
+    if(active) active.classList.add('active');
+  };
+  window.addEventListener('scroll', spy); spy();
+
+  // Reveal on view
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target);} });
+  }, {threshold: .15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Skill bars animate when visible
+  const barIO = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.bar > span').forEach(span=>{
+          span.style.width = span.dataset.level + '%';
+        });
+        barIO.unobserve(e.target);
+      }
+    });
+  },{threshold:.3});
+  document.querySelectorAll('#skills').forEach(el=>barIO.observe(el));
+
+  // Projects filter
+  const filterBtns = document.querySelectorAll('.filters button');
+  const cards = document.querySelectorAll('.projects .project');
+  filterBtns.forEach(btn=>btn.addEventListener('click',()=>{
+    filterBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    cards.forEach(c=>{
+      const show = f === 'all' || c.dataset.tags.includes(f);
+      c.style.display = show ? '' : 'none';
+    });
+  }));
+
+  // Back to top
+  const toTop = document.getElementById('toTop');
+  window.addEventListener('scroll',()=>{ toTop.style.display = window.scrollY>700 ? 'inline-flex' : 'none'; });
+  toTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Subtle particle background
+  const c = document.getElementById('bgCanvas'), ctx = c.getContext('2d');
+  let w,h,particles=[];
+  function resize(){ w = c.width = innerWidth; h = c.height = innerHeight; }
+  function init(){
+    particles = Array.from({length: 80}, ()=>({
+      x: Math.random()*w, y: Math.random()*h, r: Math.random()*2+0.6,
+      vx:(Math.random()-.5)*0.3, vy:(Math.random()-.5)*0.3
+    }));
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>w) p.vx*=-1;
+      if(p.y<0||p.y>h) p.vy*=-1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--brand');
+      ctx.globalAlpha=.45; ctx.fill(); ctx.globalAlpha=1;
+    });
+    // connect near particles
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const a=particles[i], b=particles[j];
+        const d=(a.x-b.x)**2+(a.y-b.y)**2;
+        if(d<110*110){
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--ring');
+          ctx.lineWidth=1; ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', ()=>{resize(); init();});
+  resize(); init(); draw();
+</script>
+</body>
+</html>
